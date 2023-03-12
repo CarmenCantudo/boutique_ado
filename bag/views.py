@@ -32,10 +32,5 @@ def add_to_bag(request, item_id):
         else:
             bag[item_id] = quantity
 
-    if item_id in list(bag.keys()):
-        bag[item_id] += quantity
-    else:
-        bag[item_id] = quantity
-
     request.session['bag'] = bag
     return redirect(redirect_url)
