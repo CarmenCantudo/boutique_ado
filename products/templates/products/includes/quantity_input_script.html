@@ -14,7 +14,7 @@
 
         var minusDisabled = currentValue < 2;
         var plusDisabled = currentValue > 98;
-        
+
         if (size) {
             $(`.decrement-size_${itemId}_${size}`).prop('disabled', minusDisabled);
             $(`.increment-size_${itemId}_${size}`).prop('disabled', plusDisabled);
