@@ -1,6 +1,7 @@
 /*
     Core logic/payment flow for this comes from here:
     https://stripe.com/docs/payments/accept-a-payment
+
     CSS from here: 
     https://stripe.com/docs/stripe-js
 */
@@ -12,7 +13,7 @@ var elements = stripe.elements();
 var style = {
     base: {
         color: '#000',
-        fontFamily: '"Shantell Sans", cursive',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
         fontSmoothing: 'antialiased',
         fontSize: '16px',
         '::placeholder': {
@@ -30,7 +31,6 @@ card.mount('#card-element');
 // Handle realtime validation errors on the card element
 card.addEventListener('change', function (event) {
     var errorDiv = document.getElementById('card-errors');
-    // If error with card input, display error message
     if (event.error) {
         var html = `
             <span class="icon" role="alert">
@@ -40,29 +40,22 @@ card.addEventListener('change', function (event) {
         `;
         $(errorDiv).html(html);
     } else {
-        // If no error, clear the errorDiv element
         errorDiv.textContent = '';
     }
 });
 
-
-//// Handle form submit ////
-
+// Handle form submit
 var form = document.getElementById('payment-form');
 
-// When the form is submitted, prevent its default behavior
 form.addEventListener('submit', function(ev) {
     ev.preventDefault();
-    // Disable the card input field and submit button
     card.update({ 'disabled': true});
     $('#submit-button').attr('disabled', true);
-    // Send payment information to Stripe for processing
     stripe.confirmCardPayment(clientSecret, {
         payment_method: {
             card: card,
         }
     }).then(function(result) {
-        // If error, display it and enable card input and submit button
         if (result.error) {
             var errorDiv = document.getElementById('card-errors');
             var html = `
@@ -74,7 +67,6 @@ form.addEventListener('submit', function(ev) {
             card.update({ 'disabled': false});
             $('#submit-button').attr('disabled', false);
         } else {
-            // If the payment is successful, submit the form
             if (result.paymentIntent.status === 'succeeded') {
                 form.submit();
             }
